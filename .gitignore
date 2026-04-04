@@ -7,3 +7,6 @@ charts/
 *.egg-info/
 dist/
 build/
+*.pdf
+screenshots/
+.claude/
