@@ -3,168 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚡ EV Charging Station — Intelligent Energy Management</title>
-    <meta name="description" content="AI-powered EV Charging Station Energy Management System using Classical Planning and Decision Networks">
+    <title>EV Charging Station — Energy Management</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=General+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
+    <div id="app">
 
-    <!-- ═══ Animated Background ═══ -->
-    <div class="bg-grid"></div>
-    <div class="glow-orb orb-1"></div>
-    <div class="glow-orb orb-2"></div>
-    <div class="glow-orb orb-3"></div>
+        <!-- ===== TOP BAR ===== -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <span class="topbar-mark"></span>
+                <h1 class="topbar-title">EV Energy Planner</h1>
+            </div>
+            <div class="topbar-center" id="stepIndicator">
+                <span class="step-label">CONFIG</span>
+            </div>
+            <div class="topbar-right">
+                <span class="topbar-tag" id="modeTag">CONFIGURE</span>
+            </div>
+        </header>
 
-    <!-- ═══ Hero Section ═══ -->
-    <header class="hero" id="hero">
-        <div class="hero-badge">AI-Powered Classical Planning & Decision Networks</div>
-        <h1 class="hero-title">
-            <span class="gradient-text">⚡ Intelligent EV</span><br>
-            <span class="hero-sub">Charging Station Manager</span>
-        </h1>
-        <p class="hero-desc">
-            Optimal multi-device charging schedules using forward state-space search and 
-            expected utility maximization with probabilistic decision networks.
-        </p>
-        <div class="hero-stats">
-            <div class="stat-pill"><span class="stat-icon">🔋</span> 5 EVs</div>
-            <div class="stat-pill"><span class="stat-icon">⚙️</span> Classical Planning</div>
-            <div class="stat-pill"><span class="stat-icon">📊</span> Decision Networks</div>
-            <div class="stat-pill"><span class="stat-icon">🎯</span> Optimal Schedule</div>
-        </div>
-        <a href="#config" class="hero-cta">
-            <span>Configure & Run</span>
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 3v14m0 0l5-5m-5 5l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        </a>
-    </header>
+        <!-- ===== MAIN THREE-COLUMN BODY ===== -->
+        <main class="dashboard">
 
-    <!-- ═══ Configuration Section ═══ -->
-    <section class="section" id="config">
-        <div class="section-header reveal">
-            <span class="section-tag">Configuration</span>
-            <h2>EV Fleet Setup</h2>
-            <p>Configure the electric vehicles and system parameters for the charging station.</p>
-        </div>
+            <!-- LEFT PANEL -->
+            <aside class="panel panel-left" id="panelLeft">
+                <!-- CONFIG MODE: Device inputs + params -->
+                <div class="panel-section config-only" id="configLeft">
+                    <div class="panel-heading">Fleet</div>
+                    <div id="deviceInputs"></div>
+                    <div class="panel-heading" style="margin-top:12px;">Parameters</div>
+                    <div id="paramInputs"></div>
+                </div>
+                <!-- SIM MODE: Battery bars + decision network -->
+                <div class="panel-section sim-only" id="simLeft" style="display:none;">
+                    <div class="panel-heading">Battery Status</div>
+                    <div id="batteryBars"></div>
+                    <div class="panel-heading" style="margin-top:12px;">Decision Network</div>
+                    <div id="decisionNetwork"></div>
+                </div>
+            </aside>
 
-        <!-- Device Cards -->
-        <div class="device-grid reveal" id="deviceGrid">
-            <!-- Populated by JS -->
-        </div>
-
-        <!-- Parameters Panel -->
-        <div class="params-panel reveal" id="paramsPanel">
-            <h3 class="params-title">System Parameters</h3>
-            <div class="params-grid">
-                <div class="param-item">
-                    <label>Planning Horizon (steps)</label>
-                    <div class="param-control">
-                        <input type="range" id="paramHorizon" min="2" max="8" value="5" class="slider">
-                        <span class="param-value" id="paramHorizonVal">5</span>
+            <!-- CENTER PANEL -->
+            <section class="panel panel-center" id="panelCenter">
+                <!-- CONFIG MODE: Intro -->
+                <div class="center-intro config-only" id="configCenter">
+                    <div class="intro-icon"></div>
+                    <h2 class="intro-title">Intelligent Charging Planner</h2>
+                    <p class="intro-desc">Configure your EV fleet on the left, adjust system parameters, then run the planning engine to find the optimal multi-step charging schedule using forward state-space search and expected utility maximization.</p>
+                    <div class="intro-features">
+                        <div class="intro-feat">
+                            <span class="feat-num">01</span>
+                            <span class="feat-text">Exhaustive plan enumeration</span>
+                        </div>
+                        <div class="intro-feat">
+                            <span class="feat-num">02</span>
+                            <span class="feat-text">Probabilistic decision networks</span>
+                        </div>
+                        <div class="intro-feat">
+                            <span class="feat-num">03</span>
+                            <span class="feat-text">Optimal expected utility</span>
+                        </div>
                     </div>
                 </div>
-                <div class="param-item">
-                    <label>Max Charging Slots</label>
-                    <div class="param-control">
-                        <input type="range" id="paramSlots" min="1" max="4" value="2" class="slider">
-                        <span class="param-value" id="paramSlotsVal">2</span>
+                <!-- SIM MODE: Battery visualization -->
+                <div class="center-sim sim-only" id="simCenter" style="display:none;">
+                    <div class="center-sim-header">
+                        <span class="sim-subtitle">Battery Levels</span>
+                        <span class="sim-step-badge" id="centerStepBadge">Step 1</span>
+                    </div>
+                    <div class="battery-viz" id="batteryViz"></div>
+                    <div class="charging-indicator" id="chargingIndicator"></div>
+                </div>
+            </section>
+
+            <!-- RIGHT PANEL -->
+            <aside class="panel panel-right" id="panelRight">
+                <!-- CONFIG MODE: Formula reference -->
+                <div class="panel-section config-only" id="configRight">
+                    <div class="panel-heading">Formulas</div>
+                    <div class="formula-card">
+                        <div class="formula-name">Battery Deficiency Cost</div>
+                        <div class="formula-expr">C(t) = <span class="fm">&#931;</span><sub>i</sub> (100 - b<sub>i</sub>)</div>
+                    </div>
+                    <div class="formula-card">
+                        <div class="formula-name">Total Cost</div>
+                        <div class="formula-expr">TC = <span class="fm">&#931;</span><sub>t</sub> C(t) + switches <span class="fm">&times;</span> s</div>
+                    </div>
+                    <div class="formula-card">
+                        <div class="formula-name">Expected Utility</div>
+                        <div class="formula-expr">EU = P<sub>s</sub><span class="fm">&middot;</span>R - P<sub>f</sub><span class="fm">&middot;</span>Pen - TC</div>
                     </div>
                 </div>
-                <div class="param-item">
-                    <label>Charging Success Probability</label>
-                    <div class="param-control">
-                        <input type="range" id="paramProb" min="70" max="100" value="90" class="slider">
-                        <span class="param-value" id="paramProbVal">0.90</span>
+                <!-- SIM MODE: State tree + live math -->
+                <div class="panel-section sim-only" id="simRight" style="display:none;">
+                    <div class="panel-heading">State Tree</div>
+                    <div id="stateTree"></div>
+                    <div class="panel-heading" style="margin-top:12px;">Live Utility</div>
+                    <div id="liveMath"></div>
+                </div>
+            </aside>
+        </main>
+
+        <!-- ===== BOTTOM BAR ===== -->
+        <footer class="bottombar">
+            <!-- CONFIG MODE -->
+            <div class="bottom-config config-only" id="bottomConfig">
+                <button class="run-btn" id="runBtn" onclick="runPlanning()">
+                    <span class="run-btn-text" id="runBtnText">Run Planning Engine</span>
+                    <span class="run-btn-spinner" id="runSpinner"></span>
+                </button>
+            </div>
+            <!-- SIM MODE -->
+            <div class="bottom-sim sim-only" id="bottomSim" style="display:none;">
+                <div class="playback-controls">
+                    <button class="pb-btn" onclick="goFirst()" title="First step">|&lt;</button>
+                    <button class="pb-btn" onclick="goPrev()" title="Previous step">&lt;</button>
+                    <button class="pb-btn pb-play" onclick="togglePlay()" id="playBtn" title="Play/Pause">&#9654;</button>
+                    <button class="pb-btn" onclick="goNext()" title="Next step">&gt;</button>
+                    <button class="pb-btn" onclick="goLast()" title="Last step">&gt;|</button>
+                </div>
+                <div class="bottom-stats">
+                    <div class="bstat">
+                        <span class="bstat-label">Plans</span>
+                        <span class="bstat-value" id="statPlans">--</span>
+                    </div>
+                    <div class="bstat">
+                        <span class="bstat-label">EU</span>
+                        <span class="bstat-value" id="statEU">--</span>
+                    </div>
+                    <div class="bstat">
+                        <span class="bstat-label">Step</span>
+                        <span class="bstat-value" id="statStep">--</span>
                     </div>
                 </div>
-                <div class="param-item">
-                    <label>Switching Penalty</label>
-                    <div class="param-control">
-                        <input type="range" id="paramSwitch" min="0" max="20" value="5" class="slider">
-                        <span class="param-value" id="paramSwitchVal">5</span>
-                    </div>
+                <button class="analysis-btn" onclick="toggleAnalysis()">Analysis</button>
+                <button class="reset-btn" onclick="resetToConfig()">Reset</button>
+            </div>
+        </footer>
+
+        <!-- ===== ANALYSIS OVERLAY ===== -->
+        <div class="analysis-overlay" id="analysisOverlay" style="display:none;">
+            <div class="analysis-panel">
+                <div class="analysis-header">
+                    <span class="panel-heading" style="margin:0;">Analysis</span>
+                    <button class="analysis-close" onclick="toggleAnalysis()">&times;</button>
                 </div>
+                <div class="analysis-body" id="analysisBody"></div>
             </div>
         </div>
-
-        <!-- Run Button -->
-        <div class="run-section reveal">
-            <button class="run-btn" id="runBtn" onclick="runPlanning()">
-                <span class="run-btn-text">⚡ Run Planning Engine</span>
-                <div class="run-btn-loader" id="runLoader"></div>
-            </button>
-            <p class="run-hint" id="runHint">Click to generate all possible charging schedules and find the optimal plan</p>
-        </div>
-    </section>
-
-    <!-- ═══ Results Section (hidden until run) ═══ -->
-    <section class="section results-section" id="resultsSection" style="display:none;">
-        
-        <!-- Summary Cards -->
-        <div class="section-header reveal">
-            <span class="section-tag">Results</span>
-            <h2>Optimal Charging Plan</h2>
-        </div>
-
-        <div class="summary-grid reveal" id="summaryGrid">
-            <!-- Populated by JS -->
-        </div>
-
-        <!-- Optimal Plan Details -->
-        <div class="plan-details reveal" id="planDetails">
-            <!-- Populated by JS -->
-        </div>
-
-        <!-- Formulas Used -->
-        <div class="formulas-card reveal">
-            <h3>📐 Formulas Used (from Assignment)</h3>
-            <div class="formula-grid">
-                <div class="formula-item">
-                    <div class="formula-label">Battery Deficiency Cost at step t</div>
-                    <div class="formula-math">Σᵢ (100 − bᵢ)</div>
-                </div>
-                <div class="formula-item">
-                    <div class="formula-label">Total Cost</div>
-                    <div class="formula-math">Σₜ Σᵢ (100 − bᵢ) + (Switching Actions × s)</div>
-                </div>
-                <div class="formula-item">
-                    <div class="formula-label">Expected Utility</div>
-                    <div class="formula-math">EU = P(success) × Reward − P(failure) × Penalty − Cost</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══ Visualizations Section ═══ -->
-    <section class="section viz-section" id="vizSection" style="display:none;">
-        <div class="section-header reveal">
-            <span class="section-tag">Visualizations</span>
-            <h2>Analysis & Charts</h2>
-            <p>Comprehensive visual analysis of the planning engine output.</p>
-        </div>
-
-        <div class="viz-grid" id="vizGrid">
-            <!-- Populated by JS -->
-        </div>
-    </section>
-
-    <!-- ═══ Analysis Section ═══ -->
-    <section class="section analysis-section" id="analysisSection" style="display:none;">
-        <div class="section-header reveal">
-            <span class="section-tag">Insights</span>
-            <h2>Analysis & Interpretation</h2>
-        </div>
-        <div class="analysis-content reveal" id="analysisContent">
-            <!-- Populated by JS -->
-        </div>
-    </section>
-
-    <!-- ═══ Footer ═══ -->
-    <footer class="footer">
-        <p>Intelligent Energy Management System — Classical Planning & Decision Networks</p>
-        <p class="footer-sub">UCS3461 Foundations of Artificial Intelligence | SSN College of Engineering</p>
-    </footer>
+    </div>
 
     <script src="/static/script.js"></script>
 </body>

@@ -194,8 +194,12 @@ def compute_plan_metrics(plan: Plan, devices: List[Device],
                 total_penalty += low_pen * devices[i].priority
 
     # ── Expected Utility (from PDF) ──
+    # P(success) = p^H, P(failure) = 1 - P(success)
     # EU = P(success) × Total Reward - P(failure) × Total Penalty - Total Cost
-    expected_utility = (p * total_reward) - ((1 - p) * total_penalty) - total_cost
+    horizon = len(plan.steps)
+    p_success = p ** horizon
+    p_failure = 1 - p_success
+    expected_utility = (p_success * total_reward) - (p_failure * total_penalty) - total_cost
 
     plan.total_cost = total_cost
     plan.total_reward = total_reward
