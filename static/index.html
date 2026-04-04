@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ EV Charging Station — Intelligent Energy Management</title>
+    <meta name="description" content="AI-powered EV Charging Station Energy Management System using Classical Planning and Decision Networks">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+
+    <!-- ═══ Animated Background ═══ -->
+    <div class="bg-grid"></div>
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+
+    <!-- ═══ Hero Section ═══ -->
+    <header class="hero" id="hero">
+        <div class="hero-badge">AI-Powered Classical Planning & Decision Networks</div>
+        <h1 class="hero-title">
+            <span class="gradient-text">⚡ Intelligent EV</span><br>
+            <span class="hero-sub">Charging Station Manager</span>
+        </h1>
+        <p class="hero-desc">
+            Optimal multi-device charging schedules using forward state-space search and 
+            expected utility maximization with probabilistic decision networks.
+        </p>
+        <div class="hero-stats">
+            <div class="stat-pill"><span class="stat-icon">🔋</span> 5 EVs</div>
+            <div class="stat-pill"><span class="stat-icon">⚙️</span> Classical Planning</div>
+            <div class="stat-pill"><span class="stat-icon">📊</span> Decision Networks</div>
+            <div class="stat-pill"><span class="stat-icon">🎯</span> Optimal Schedule</div>
+        </div>
+        <a href="#config" class="hero-cta">
+            <span>Configure & Run</span>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 3v14m0 0l5-5m-5 5l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </a>
+    </header>
+
+    <!-- ═══ Configuration Section ═══ -->
+    <section class="section" id="config">
+        <div class="section-header reveal">
+            <span class="section-tag">Configuration</span>
+            <h2>EV Fleet Setup</h2>
+            <p>Configure the electric vehicles and system parameters for the charging station.</p>
+        </div>
+
+        <!-- Device Cards -->
+        <div class="device-grid reveal" id="deviceGrid">
+            <!-- Populated by JS -->
+        </div>
+
+        <!-- Parameters Panel -->
+        <div class="params-panel reveal" id="paramsPanel">
+            <h3 class="params-title">System Parameters</h3>
+            <div class="params-grid">
+                <div class="param-item">
+                    <label>Planning Horizon (steps)</label>
+                    <div class="param-control">
+                        <input type="range" id="paramHorizon" min="2" max="8" value="5" class="slider">
+                        <span class="param-value" id="paramHorizonVal">5</span>
+                    </div>
+                </div>
+                <div class="param-item">
+                    <label>Max Charging Slots</label>
+                    <div class="param-control">
+                        <input type="range" id="paramSlots" min="1" max="4" value="2" class="slider">
+                        <span class="param-value" id="paramSlotsVal">2</span>
+                    </div>
+                </div>
+                <div class="param-item">
+                    <label>Charging Success Probability</label>
+                    <div class="param-control">
+                        <input type="range" id="paramProb" min="70" max="100" value="90" class="slider">
+                        <span class="param-value" id="paramProbVal">0.90</span>
+                    </div>
+                </div>
+                <div class="param-item">
+                    <label>Switching Penalty</label>
+                    <div class="param-control">
+                        <input type="range" id="paramSwitch" min="0" max="20" value="5" class="slider">
+                        <span class="param-value" id="paramSwitchVal">5</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Run Button -->
+        <div class="run-section reveal">
+            <button class="run-btn" id="runBtn" onclick="runPlanning()">
+                <span class="run-btn-text">⚡ Run Planning Engine</span>
+                <div class="run-btn-loader" id="runLoader"></div>
+            </button>
+            <p class="run-hint" id="runHint">Click to generate all possible charging schedules and find the optimal plan</p>
+        </div>
+    </section>
+
+    <!-- ═══ Results Section (hidden until run) ═══ -->
+    <section class="section results-section" id="resultsSection" style="display:none;">
+        
+        <!-- Summary Cards -->
+        <div class="section-header reveal">
+            <span class="section-tag">Results</span>
+            <h2>Optimal Charging Plan</h2>
+        </div>
+
+        <div class="summary-grid reveal" id="summaryGrid">
+            <!-- Populated by JS -->
+        </div>
+
+        <!-- Optimal Plan Details -->
+        <div class="plan-details reveal" id="planDetails">
+            <!-- Populated by JS -->
+        </div>
+
+        <!-- Formulas Used -->
+        <div class="formulas-card reveal">
+            <h3>📐 Formulas Used (from Assignment)</h3>
+            <div class="formula-grid">
+                <div class="formula-item">
+                    <div class="formula-label">Battery Deficiency Cost at step t</div>
+                    <div class="formula-math">Σᵢ (100 − bᵢ)</div>
+                </div>
+                <div class="formula-item">
+                    <div class="formula-label">Total Cost</div>
+                    <div class="formula-math">Σₜ Σᵢ (100 − bᵢ) + (Switching Actions × s)</div>
+                </div>
+                <div class="formula-item">
+                    <div class="formula-label">Expected Utility</div>
+                    <div class="formula-math">EU = P(success) × Reward − P(failure) × Penalty − Cost</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ Visualizations Section ═══ -->
+    <section class="section viz-section" id="vizSection" style="display:none;">
+        <div class="section-header reveal">
+            <span class="section-tag">Visualizations</span>
+            <h2>Analysis & Charts</h2>
+            <p>Comprehensive visual analysis of the planning engine output.</p>
+        </div>
+
+        <div class="viz-grid" id="vizGrid">
+            <!-- Populated by JS -->
+        </div>
+    </section>
+
+    <!-- ═══ Analysis Section ═══ -->
+    <section class="section analysis-section" id="analysisSection" style="display:none;">
+        <div class="section-header reveal">
+            <span class="section-tag">Insights</span>
+            <h2>Analysis & Interpretation</h2>
+        </div>
+        <div class="analysis-content reveal" id="analysisContent">
+            <!-- Populated by JS -->
+        </div>
+    </section>
+
+    <!-- ═══ Footer ═══ -->
+    <footer class="footer">
+        <p>Intelligent Energy Management System — Classical Planning & Decision Networks</p>
+        <p class="footer-sub">UCS3461 Foundations of Artificial Intelligence | SSN College of Engineering</p>
+    </footer>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+# Intelligent Multi-Device Energy Management System
+
+Full-stack web app using **FastAPI + HTML/CSS/JS** with Classical Planning and Decision Networks.
+
+## Architecture
+
+```mermaid
+graph LR
+    A["Frontend<br/>HTML/CSS/JS"] -->|REST API| B["FastAPI Backend"]
+    B --> C["Planning Engine"]
+    B --> D["Decision Network"]
+    B --> E["Visualization<br/>matplotlib → PNG"]
+```
+
+## Scenario: Hospital ICU
+
+| Device | Priority | Init Battery | Consumption | Charge Rate |
+|---|---|---|---|---|
+| Ventilator | Critical (5) | 40% | 15/step | 25/step |
+| Patient Monitor | High (4) | 60% | 10/step | 20/step |
+| Infusion Pump | High (4) | 35% | 12/step | 20/step |
+| Defibrillator | Medium (3) | 80% | 8/step | 18/step |
+| Diagnostic Scanner | Low (1) | 70% | 5/step | 15/step |
+
+**Constraints:** Max 2 simultaneous charges, horizon 5 steps, P(success) = 0.9, switching penalty = 5
+
+---
+
+## Proposed Changes
+
+### Backend — FastAPI
+
+#### [NEW] [main.py](file:///Users/raghunandanshaji/Downloads/AI%20Mini%20Proj/main.py)
+FastAPI server with endpoints:
+- `GET /` — Serve the frontend
+- `POST /api/run` — Accept device config + parameters, run planning engine, return results JSON
+- `GET /api/visualizations/{name}` — Serve generated matplotlib PNG charts
+- Static file serving for frontend assets
+
+#### [NEW] [planning_engine.py](file:///Users/raghunandanshaji/Downloads/AI%20Mini%20Proj/planning_engine.py)
+Core AI logic:
+- `Device` dataclass (name, priority, battery, consumption_rate, charge_rate)
+- `State` — tuple of battery levels
+- `forward_search()` — Generate all charging schedules via state-space search
+- `compute_expected_utility()` — EU calculation with probabilistic success/failure
+- `find_optimal_plan()` — Evaluate and rank all plans
+
+#### [NEW] [visualizations.py](file:///Users/raghunandanshaji/Downloads/AI%20Mini%20Proj/visualizations.py)
+Matplotlib chart generation (saved as PNGs):
+1. Battery evolution over time (all devices, optimal plan highlighted)
+2. State-space search tree (2–3 step subset)
+3. Expected Utility comparison bar chart
+4. Device-wise battery stability heatmap
+5. Failure risk analysis chart
+
+---
+
+### Frontend — HTML/CSS/JS
+
+#### [NEW] [static/index.html](file:///Users/raghunandanshaji/Downloads/AI%20Mini%20Proj/static/index.html)
+Single-page app with sections:
+1. **Hero/Landing** — Animated title, glowing effects, project intro
+2. **Device Configuration** — Interactive cards for each device (editable battery, priority, rates)
+3. **Parameters Panel** — Sliders for horizon, max charging slots, success probability, switching penalty
+4. **Run Button** — Triggers planning with loading animation
+5. **Results Dashboard** — Optimal plan display, EU score, plan details
+6. **Visualizations Gallery** — Embedded charts with smooth reveal animations
+7. **Analysis Section** — Insights, risk assessment, recommendations
+
+#### [NEW] [static/styles.css](file:///Users/raghunandanshaji/Downloads/AI%20Mini%20Proj/static/styles.css)
+Premium dark-mode design:
+- Glassmorphism cards, gradient backgrounds, neon accents
+- Smooth transitions, hover effects, scroll animations
+- Responsive grid layout, custom sliders/inputs
+- Loading spinner with pulse animation
+
+#### [NEW] [static/script.js](file:///Users/raghunandanshaji/Downloads/AI%20Mini%20Proj/static/script.js)
+- Fetch API calls to backend
+- DOM manipulation for dynamic results rendering
+- Scroll-triggered reveal animations (IntersectionObserver)
+- Interactive device card editing
+- Chart gallery with fade-in transitions
+
+---
+
+## Verification Plan
+
+### Automated
+- `pip install fastapi uvicorn matplotlib numpy` then `python3 main.py`
+- Open `http://localhost:8000` in browser
+- Click "Run" with default config and verify results + charts appear
+
+### Manual
+- Verify optimal plan prioritizes critical devices (Ventilator)
+- Verify all 5 visualizations render correctly
+- Test with modified parameters to see different optimal plans
